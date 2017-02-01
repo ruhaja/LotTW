@@ -138,7 +138,11 @@ function modinNimi:pickupPassiveItem(player, flag)
 		--costumeAdded = false
 	end
 	
-	--INQUISITOR TRANSFORM
+	
+end
+
+function modinNimi:onUpdate()
+		--INQUISITOR TRANSFORM
 	if not isInquisitor then
 		
 		for k,v in pairs(items) do
@@ -147,15 +151,14 @@ function modinNimi:pickupPassiveItem(player, flag)
 			end
 		end  
 		if itemCount >= 2 then
-				player:AnimateHappy()
+				--player:AnimateHappy()
 				isInquisitor = true
 				player:AddHearts(1)
 				player:AddNullCostume(costumeTransform)
+				PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
 		end
-		PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
+		
 	end
-	
-	
 end
 
 
@@ -279,6 +282,7 @@ modinNimi:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, onInit, theSawEntityVariant
 modinNimi:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, onFamiliarUpdate, theSawEntityVariant)
 
 modinNimi:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, modinNimi.onDamage, EntityType.ENTITY_PLAYER)
+modinNimi:AddCallback(ModCallbacks.MC_POST_UPDATE, modinNimi.onUpdate)
 
 
 
