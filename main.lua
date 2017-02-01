@@ -27,7 +27,8 @@ local isInquisitor = false
 --SAW END
 
 --passive items
-local tongueTearer = Isaac.GetItemIdByName("Tongue Tearer") 
+local tongueTearer = Isaac.GetItemIdByName("Tongue Tearer")
+local hasTongueTearerAffected = false
 local broomstick = Isaac.GetItemIdByName("Broomstick")
 local hereticsFork = Isaac.GetItemIdByName("Heretic's Fork")
 
@@ -121,13 +122,6 @@ function modinNimi:pickupPassiveItem(player, flag)
 			if (player.MaxFireDelay >= (MIN_TEAR_DELAY + tearBonus)) then 
 				player.MaxFireDelay = player.MaxFireDelay - tearBonus
 			end
-			if (player:GetPlayerType() == 3) then --jos player on judas, niin spawnaa judas' tongue, jotain player.PlayerType()==PLAYER_JUDAS
-				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_JUDAS_TONGUE , player.Position, Vector(0,0), player) --jos if on totta niin spawnaa judas' tongue
-			else --spawnaa TRINKET_LUCKY_TOE
-				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_LUCKY_TOE, player.Position, Vector(0,0), player)
-			end
-			
-			PlaySoundAtPos(SoundEffect.SOUND_BLOODBANK_SPAWN, 1.0, player.Position) --joku snipetisnapeti soundi
 		end
 			--if costumeAdded == false then
 				--player:AddNullCostume(costume) --visual olis tyyliin, isaacin suusta valuu vähän verta
@@ -158,6 +152,23 @@ function modinNimi:onUpdate()
 				PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
 		end
 		
+	end
+	
+	
+	if player:HasCollectible(tongueTearer) then --check if player has the item
+		if hasTongueTearerAffected == false then
+			if (player:GetPlayerType() == 3) then --jos player on judas, niin spawnaa judas' tongue, jotain player.PlayerType()==PLAYER_JUDAS
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_JUDAS_TONGUE , player.Position, Vector(0,0), player) --jos if on totta niin spawnaa judas' tongue
+			else --spawnaa TRINKET_LUCKY_TOE
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_LUCKY_TOE, player.Position, Vector(0,0), player)
+			end
+			PlaySoundAtPos(SoundEffect.SOUND_BLOODBANK_SPAWN, 1.0, player.Position) --joku snipetisnapeti soundi
+			hasTongueTearerAffected = true
+		else
+			--nothing here please
+		end
+	else
+		hasTongueTearerAffected = false
 	end
 end
 
