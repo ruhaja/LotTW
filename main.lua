@@ -136,6 +136,8 @@ function modinNimi:pickupPassiveItem(player, flag)
 end
 
 function modinNimi:onUpdate()
+
+	local player = Isaac.GetPlayer(0)
 		--INQUISITOR TRANSFORM
 	if not isInquisitor then
 		
