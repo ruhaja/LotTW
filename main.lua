@@ -3,6 +3,7 @@ local modinNimi = RegisterMod("inquisition",1)
 
 local game = Game()
 
+--SAW
 local theSaw = Isaac.GetItemIdByName( "The Saw" ) 
 local theSawEntity = Isaac.GetEntityTypeByName( "TheSaw" )
 local theSawEntityVariant = Isaac.GetEntityVariantByName("TheSaw")
@@ -10,15 +11,20 @@ local theSawEntityVariant = Isaac.GetEntityVariantByName("TheSaw")
 local rnd = RNG()
 local rndInt
 local spawned = false
-local hitChance
-local proc = 20
+local hitChance				-- arvotaan 0-100 väliltä ja plussataan siihen luck%
+local proc = 80 			-- default 80? mitä korkeampi, sitä epätodennäköisemmin sahaa. Jos tämä on 100, niin sahaaminen tapahtuu 0% ajasta, sama toisinpäin
+local luckMult = 3 			-- joka luck up/down on tämän verran % lisää mahdollisuutta sahalle leikata
 local familiar = nil
+local inquisitorBonus = 1.0 -- kerroin joka aktivoituu/muutetaan kun inkivisitio transform on päällä
+local sawAmount = 0
+local flatDmg = 3
 
 local whip = Isaac.GetItemIdByName("Cat-o-nine-tails")
 local guillotine = Isaac.GetItemIdByName("Guillotine")
 local itemCount = 0
 local items = {tongueTearer, book, wheel, hereticsFork, theSaw, whip, quillotine}
 local isInquisitor = false
+--SAW END
 
 --passive items
 local tongueTearer = Isaac.GetItemIdByName("Tongue Tearer") 
@@ -52,6 +58,12 @@ local MIN_TEAR_DELAY = 5
 --local costumeAdded = false
 local tearBonus = 1
 
+local function PlaySoundAtPos(sound, volume, pos)
+  local soundDummy = Isaac.Spawn(EntityType.ENTITY_FLY, 0, 0, pos, Vector(0,0), Isaac.GetPlayer(0));
+  local soundDummyNPC = soundDummy:ToNPC();
+  soundDummyNPC:PlaySound(sound, volume, 0, false, 1.0);
+  soundDummy:Remove();
+end
 
 function modinNimi:pickupPassiveItem(player, flag)
 	
@@ -61,10 +73,13 @@ function modinNimi:pickupPassiveItem(player, flag)
 	if player:HasCollectible(theSaw) then
 		if flag == CacheFlag.CACHE_FAMILIARS and spawned == false then
 			familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, theSawEntityVariant, 0, player.Position, Vector(0,0), player)
+			--lineUpFamiliars()
+			sawAmount = sawAmount + 1
 			spawned = true
 		end
 	else
-		spawned = false
+		spawned = false --sitä varten ettei spawnaa uudestaan
+		sawAmount = 0
 	end
 	
 	--BROOMSTICK
@@ -206,7 +221,6 @@ local function onFamiliarUpdate(_, fam)
 	
 	local player = Isaac.GetPlayer(0)
 	local sprite = familiar:GetSprite()
-	fam:FollowPosition(player.Position)
 	--Isaac.RenderText("positiot eri!" , 100, 90, 0, 75, 75, 255) --printti debuggia varten
 	--Isaac.RenderText("rng nro: " ..rndInt, 100, 90, 0, 75, 75, 255) --printti debuggia varten
 	if sprite:IsFinished("Sawing") then
@@ -224,22 +238,48 @@ local function onFamiliarUpdate(_, fam)
 		end
 		hitChance = rnd:RandomInt(100)
 		--Isaac.RenderText("taulukon index: " ..#vulnerables, 100, 100, 0, 75, 75, 255) --printti debuggia varten
-		if (player.Luck * 5 + hitChance > proc) then
+		if (player.Luck * luckMult * inquisitorBonus + hitChance > proc) then
 			if #vulnerables > 0 then
 				if #vulnerables == 1 then
 					vulnerables[1]:AddEntityFlags(EntityFlag.FLAG_BLEED_OUT)
-					vulnerables[1]:TakeDamage(2, DamageFlag.DAMAGE_FAKE, EntityRef(vulnerables[1]),0)
+					vulnerables[1]:TakeDamage(inquisitorBonus * player.Damage * 0.75 + flatDmg, DamageFlag.DAMAGE_FAKE, EntityRef(vulnerables[1]),0)
 				else
 					rndInt = rnd:RandomInt(#vulnerables-1)
 					--Isaac.RenderText("rng nro: " ..rndInt, 100, 90, 0, 75, 75, 255) --printti debuggia varten
 					vulnerables[rndInt+1]:AddEntityFlags(EntityFlag.FLAG_BLEED_OUT)
-					vulnerables[rndInt+1]:TakeDamage(2, DamageFlag.DAMAGE_FAKE, EntityRef(vulnerables[rndInt+1]),0)
+					vulnerables[rndInt+1]:TakeDamage(inquisitorBonus * player.Damage * 0.75 + flatDmg, DamageFlag.DAMAGE_FAKE, EntityRef(vulnerables[rndInt+1]),0)
 				end
 				
 				sprite:Play("Sawing", true)
+				PlaySoundAtPos(SoundEffect.SOUND_DEATH_BURST_LARGE, 1.0, player.Position)
+				--EntityNPC::PlaySound( SoundEffect ID, float  	Volume, integer  	FrameDelay, boolean  	Loop, float  	Pitch) 		
 			end
 		end
 	end
+	fam:FollowParent()
+end
+--[[
+local function onInit(_, fam)
+	--local player = Isaac.GetPlayer(0)
+	
+end
+--]]
+local function onEvaluateCache( _, _, cacheFlag)
+	local player = Isaac.GetPlayer(0)
+	
+	if player:HasCollectible(theSaw) then
+		if cacheFlag == CacheFlag.CACHE_FAMILIARS and spawned == false then
+			familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, theSawEntityVariant, 0, player.Position, Vector(0,0), player)
+			--lineUpFamiliars()
+			sawAmount = sawAmount + 1
+			spawned = true
+		end
+	else
+		spawned = false --sitä varten ettei spawnaa uudestaan
+		sawAmount = 0
+	end
+	--lineUpFamiliars()
+	
 end
 
 --modinNimi:AddCallback(ModCallbacks.MC_POST_UPDATE, modinNimi.spawnItem)          -- Actually sets it up so the function will be called, it's called too often but oh well
