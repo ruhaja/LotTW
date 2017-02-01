@@ -12,7 +12,7 @@ local rnd = RNG()
 local rndInt
 local spawned = false
 local hitChance				-- arvotaan 0-100 väliltä ja plussataan siihen luck%
-local proc = 80 			-- default 80? mitä korkeampi, sitä epätodennäköisemmin sahaa. Jos tämä on 100, niin sahaaminen tapahtuu 0% ajasta, sama toisinpäin
+local proc = 80 			-- default 80? mitä korkeampi, sitä EPÄtodennäköisemmin sahaa. Jos tämä on 100, niin sahaaminen tapahtuu 0% ajasta, sama toisinpäin
 local luckMult = 3 			-- joka luck up/down on tämän verran % lisää mahdollisuutta sahalle leikata
 local familiar = nil
 local inquisitorBonus = 1.0 -- kerroin joka aktivoituu/muutetaan kun inkivisitio transform on päällä
@@ -126,7 +126,8 @@ function modinNimi:pickupPassiveItem(player, flag)
 			else --spawnaa TRINKET_LUCKY_TOE
 				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, TrinketType.TRINKET_LUCKY_TOE, player.Position, Vector(0,0), player)
 			end
-			--joku snipetisnapeti soundi?
+			
+			PlaySoundAtPos(SoundEffect.SOUND_BLOODBANK_SPAWN, 1.0, player.Position) --joku snipetisnapeti soundi
 		end
 			--if costumeAdded == false then
 				--player:AddNullCostume(costume) --visual olis tyyliin, isaacin suusta valuu vähän verta
@@ -151,6 +152,7 @@ function modinNimi:pickupPassiveItem(player, flag)
 				player:AddHearts(1)
 				player:AddNullCostume(costumeTransform)
 		end
+		PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
 	end
 	
 	
@@ -264,23 +266,7 @@ local function onInit(_, fam)
 	
 end
 --]]
-local function onEvaluateCache( _, _, cacheFlag)
-	local player = Isaac.GetPlayer(0)
-	
-	if player:HasCollectible(theSaw) then
-		if cacheFlag == CacheFlag.CACHE_FAMILIARS and spawned == false then
-			familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, theSawEntityVariant, 0, player.Position, Vector(0,0), player)
-			--lineUpFamiliars()
-			sawAmount = sawAmount + 1
-			spawned = true
-		end
-	else
-		spawned = false --sitä varten ettei spawnaa uudestaan
-		sawAmount = 0
-	end
-	--lineUpFamiliars()
-	
-end
+
 
 --modinNimi:AddCallback(ModCallbacks.MC_POST_UPDATE, modinNimi.spawnItem)          -- Actually sets it up so the function will be called, it's called too often but oh well
 
