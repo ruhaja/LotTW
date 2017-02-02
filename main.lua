@@ -158,6 +158,18 @@ function modinNimi:onUpdate()
 		
 	end
 	
+	--alla oleva koodi kaataa pelin, koska nicalis pls??
+	--[[
+	if player:HasCollectible(hereticsFork) then
+		if costumeAdded == false then
+			player:AddNullCostume(costumeHereticsFork)
+			costumeAdded = true
+		else 
+			costumeAdded = false
+		end
+	end
+	--]]
+		
 	
 	if player:HasCollectible(tongueTearer) then --check if player has the item
 		if hasTongueTearerAffected == false then
