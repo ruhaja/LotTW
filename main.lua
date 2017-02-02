@@ -114,7 +114,7 @@ function modinNimi:pickupPassiveItem(player, flag)
 		if flag==CacheFlag.CACHE_DAMAGE then
 			player.Damage = player.Damage + 1
 		end
-		player:AddNullCostume(costumeHereticsFork) --en ole varma onko tämä oikea paikka tälle, vai mikä on väärin, mutta kaatuu jos tämän ottaa pois kommenteista
+		--player:AddNullCostume(costumeHereticsFork) --en ole varma onko tämä oikea paikka tälle, vai mikä on väärin, mutta kaatuu jos tämän ottaa pois kommenteista
 	end
 			
 	

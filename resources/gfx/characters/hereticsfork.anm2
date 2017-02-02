@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="robot" CreatedOn="2.2.2017 9:50:48" Version="105" Fps="30"/>
+	<Info CreatedBy="" CreatedOn="2.2.2017 10:01:10" Version="107" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="costumes\malli_heretics_forkille.png" Id="0"/>
+			<Spritesheet Path="costumes\mallihereticsforkille.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="head2" Id="0" SpritesheetId="0"/>
