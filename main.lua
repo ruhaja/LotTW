@@ -149,7 +149,7 @@ function modinNimi:onUpdate()
 				itemCount = itemCount + 1
 			end
 		end  
-		if itemCount >= 2 then
+		if itemCount >= 3 then
 				--player:AnimateHappy()
 				isInquisitor = true
 				player:AddHearts(1)
