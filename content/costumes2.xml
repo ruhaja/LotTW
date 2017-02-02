@@ -1,4 +1,5 @@
 <costumes anm2root = "gfx/characters/">
 	<costume anm2path="broomstick.anm2" isFlying="true" type="none" />
 	<costume anm2path="inquisitor.anm2" type="none" />
+	<costume anm2path="hereticsfork.anm2" priority="99" type="none" />
 </costumes>

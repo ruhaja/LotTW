@@ -43,6 +43,7 @@ local costumeTransform = Isaac.GetCostumeIdByPath("gfx/characters/inquisitor.anm
 --modinNimi.COSTUME_GRAY_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/gray_broomstick.anm2")	--gray
 --modinNimi.COSTUME_BLACK_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/black_broomstick.anm2")	--black
 local costumeHereticsFork = Isaac.GetCostumeIdByPath("gfx/characters/hereticsfork.anm2")
+--local costumeAdded = false
 
 
 --local Challenges = {
@@ -114,7 +115,7 @@ function modinNimi:pickupPassiveItem(player, flag)
 		if flag==CacheFlag.CACHE_DAMAGE then
 			player.Damage = player.Damage + 1
 		end
-		--player:AddNullCostume(costumeHereticsFork) --en ole varma onko tämä oikea paikka tälle, vai mikä on väärin, mutta kaatuu jos tämän ottaa pois kommenteista
+		player:AddNullCostume(costumeHereticsFork) --en ole varma onko tämä oikea paikka tälle, vai mikä on väärin, mutta kaatuu jos tämän ottaa pois kommenteista
 	end
 			
 	
