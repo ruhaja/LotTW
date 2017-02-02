@@ -42,7 +42,7 @@ local costumeTransform = Isaac.GetCostumeIdByPath("gfx/characters/inquisitor.anm
 --modinNimi.COSTUME_BLUE_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/blue_broomstick.anm2")	--blue
 --modinNimi.COSTUME_GRAY_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/gray_broomstick.anm2")	--gray
 --modinNimi.COSTUME_BLACK_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/black_broomstick.anm2")	--black
---local costumeHereticsFork = Isaac.GetCostumeIdByPath("gfx/characters/hereticsfork.anm2")
+local costumeHereticsFork = Isaac.GetCostumeIdByPath("gfx/characters/hereticsfork.anm2")
 
 
 --local Challenges = {
@@ -109,10 +109,12 @@ function modinNimi:pickupPassiveItem(player, flag)
 	--HERETIC'S FORK
 	if player:HasCollectible(hereticsFork) then
 		if flag==CacheFlag.CACHE_SHOTSPEED then
-			player.Damage = player.Damage + 1
 			player.ShotSpeed = player.ShotSpeed - 0.4
-			player:AddNullCostume(costumeHereticsFork)
 		end
+		if flag==CacheFlag.CACHE_DAMAGE then
+			player.Damage = player.Damage + 1
+		end
+		player:AddNullCostume(costumeHereticsFork) --en ole varma onko tämä oikea paikka tälle, vai mikä on väärin, mutta kaatuu jos tämän ottaa pois kommenteista
 	end
 			
 	
