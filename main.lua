@@ -5,8 +5,8 @@ local game = Game()
 
 --SAW
 local theSaw = Isaac.GetItemIdByName( "The Saw" ) 
-local theSawEntity = Isaac.GetEntityTypeByName( "TheSaw" )
-local theSawEntityVariant = Isaac.GetEntityVariantByName("TheSaw")
+CollectibleType.COLLECTIBLE_THE_SAW = Isaac.GetItemIdByName( "The Saw" )
+FamiliarVariant.THE_SAW = Isaac.GetEntityVariantByName("TheSaw")
 
 local rnd = RNG()
 local rndInt
@@ -85,16 +85,9 @@ function modinNimi:pickupPassiveItem(player, flag)
 	local player = Isaac.GetPlayer(0)
 		
 	--SAW
-	if player:HasCollectible(theSaw) then
-		if flag == CacheFlag.CACHE_FAMILIARS and spawned == false then
-			familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, theSawEntityVariant, 0, player.Position, Vector(0,0), player)
-			--lineUpFamiliars()
-			sawAmount = sawAmount + 1
-			spawned = true
-		end
-	else
-		spawned = false --sitä varten ettei spawnaa uudestaan
-		sawAmount = 0
+	if flag == CacheFlag.CACHE_FAMILIARS then
+		player:CheckFamiliar(FamiliarVariant.THE_SAW, player:GetCollectibleNum(CollectibleType.COLLECTIBLE_THE_SAW), RNG())
+		--familiar = Isaac.Spawn(EntityType.ENTITY_FAMILIAR, theSawEntityVariant, 0, player.Position, Vector(0,0), player)
 	end
 	
 	--BROOMSTICK
@@ -292,10 +285,10 @@ function modinNimi:use_book( )
 end
 
 
-local function onFamiliarUpdate(_, fam)
+function modinNimi:theSawUpdate(thesaw)
 	
 	local player = Isaac.GetPlayer(0)
-	local sprite = familiar:GetSprite()
+	local sprite = thesaw:GetSprite()
 	--Isaac.RenderText("positiot eri!" , 100, 90, 0, 75, 75, 255) --printti debuggia varten
 	--Isaac.RenderText("rng nro: " ..rndInt, 100, 90, 0, 75, 75, 255) --printti debuggia varten
 	if sprite:IsFinished("Sawing") then
@@ -336,14 +329,16 @@ local function onFamiliarUpdate(_, fam)
 			end
 		end
 	end
-	fam:FollowParent()
+	thesaw:FollowParent()
 end
---[[
-local function onInit(_, fam)
+
+function modinNimi:getTheSaw(thesaw)
 	--local player = Isaac.GetPlayer(0)
-	
+	--local sprite = thesaw:GetSprite()
+	thesaw.IsFollower = true
+	--sprite:Play(sprite:GetDefaultAnimationName(), true)
 end
---]]
+
 
 
 --modinNimi:AddCallback(ModCallbacks.MC_POST_UPDATE, modinNimi.spawnItem)          -- Actually sets it up so the function will be called, it's called too often but oh well
@@ -354,8 +349,8 @@ modinNimi:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, modinNimi.init)
 modinNimi:AddCallback(ModCallbacks.MC_USE_ITEM, modinNimi.use_book, book)
 modinNimi:AddCallback(ModCallbacks.MC_USE_ITEM, modinNimi.use_wheel, wheel)
 
-modinNimi:AddCallback(ModCallbacks.MC_FAMILIAR_INIT, onInit, theSawEntityVariant)
-modinNimi:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, onFamiliarUpdate, theSawEntityVariant)
+modinNimi:AddCallback( ModCallbacks.MC_FAMILIAR_INIT, modinNimi.getTheSaw, FamiliarVariant.THE_SAW )
+modinNimi:AddCallback( ModCallbacks.MC_FAMILIAR_UPDATE, modinNimi.theSawUpdate, FamiliarVariant.THE_SAW )
 
 modinNimi:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, modinNimi.onDamage, EntityType.ENTITY_PLAYER)
 modinNimi:AddCallback(ModCallbacks.MC_POST_UPDATE, modinNimi.onUpdate)
