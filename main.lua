@@ -12,12 +12,14 @@ local rnd = RNG()
 local rndInt
 local spawned = false
 local hitChance				-- arvotaan 0-100 väliltä ja plussataan siihen luck%
-local proc = 80 			-- default 80? mitä korkeampi, sitä EPÄtodennäköisemmin sahaa. Jos tämä on 100, niin sahaaminen tapahtuu 0% ajasta, sama toisinpäin
-local luckMult = 3 			-- joka luck up/down on tämän verran % lisää mahdollisuutta sahalle leikata
+local proc = 67 			-- default 67? mitä korkeampi, sitä epätodennäköisemmin sahaa. Jos tämä on 100, niin sahaaminen tapahtuu 0% ajasta, sama toisinpäin
+local bleedChance
+local bleedProc = 73		-- default 73? mitä korkeampi, sitä epätodennäköisemmin bleedaa. Jos tämä on 100, niin bleedaaminen tapahtuu 0% ajasta, sama toisinpäin
+local luckMult = 5 			-- joka luck up/down on tämän verran % lisää mahdollisuutta sahalle leikata
 local familiar = nil
 local inquisitorBonus = 1.0 -- kerroin joka aktivoituu/muutetaan kun inkivisitio transform on päällä
 local sawAmount = 0
-local flatDmg = 3
+local flatDmg = 4
 
 local whip = Isaac.GetItemIdByName("Cat-o-nine-tails")
 local guillotine = Isaac.GetItemIdByName("Guillotine")
@@ -265,16 +267,19 @@ local function onFamiliarUpdate(_, fam)
 		local vulnerables = {}
 		
 		for i = 1, #entities do
-			if (entities[i]:IsVulnerableEnemy() and not(entities[i]:HasEntityFlags(EntityFlag.FLAG_BLEED_OUT))) then
+			if entities[i]:IsVulnerableEnemy() then --and not(entities[i]:HasEntityFlags(EntityFlag.FLAG_BLEED_OUT)) removed
 				vulnerables[#vulnerables+1] = entities[i]
 			end
 		end
 		hitChance = rnd:RandomInt(100)
+		bleedChance = rnd:RandomInt(100)
 		--Isaac.RenderText("taulukon index: " ..#vulnerables, 100, 100, 0, 75, 75, 255) --printti debuggia varten
 		if (player.Luck * luckMult * inquisitorBonus + hitChance > proc) then
 			if #vulnerables > 0 then
 				if #vulnerables == 1 then
-					vulnerables[1]:AddEntityFlags(EntityFlag.FLAG_BLEED_OUT)
+					if player.Luck * luckMult * inquisitorBonus + bleedChance > bleedProc then
+						vulnerables[1]:AddEntityFlags(EntityFlag.FLAG_BLEED_OUT)
+					end
 					vulnerables[1]:TakeDamage(inquisitorBonus * player.Damage * 0.75 + flatDmg, DamageFlag.DAMAGE_FAKE, EntityRef(vulnerables[1]),0)
 				else
 					rndInt = rnd:RandomInt(#vulnerables-1)
