@@ -323,7 +323,9 @@ local function onFamiliarUpdate(_, fam)
 				else
 					rndInt = rnd:RandomInt(#vulnerables-1)
 					--Isaac.RenderText("rng nro: " ..rndInt, 100, 90, 0, 75, 75, 255) --printti debuggia varten
-					vulnerables[rndInt+1]:AddEntityFlags(EntityFlag.FLAG_BLEED_OUT)
+					if player.Luck * luckMult * inquisitorBonus + bleedChance > bleedProc then
+						vulnerables[1]:AddEntityFlags(EntityFlag.FLAG_BLEED_OUT)
+					end
 					vulnerables[rndInt+1]:TakeDamage(inquisitorBonus * player.Damage * 0.75 + flatDmg, DamageFlag.DAMAGE_FAKE, EntityRef(vulnerables[rndInt+1]),0)
 				end
 				
