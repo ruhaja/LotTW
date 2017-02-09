@@ -27,6 +27,7 @@ local whip = Isaac.GetItemIdByName("Cat-o-nine-tails")
 local guillotine = Isaac.GetItemIdByName("Guillotine")
 local isInquisitor = false
 
+local necronomicon = Isaac.GetItemIdByName("The Necronomicon")
 local pact = Isaac.GetItemIdByName("The Pact")
 local isWitch = false
 
@@ -180,7 +181,7 @@ function modinNimi:onUpdate()
 	--WITCH TRANSFORM
 	if not isWitch then
 		
-		local witchItems = {pact, broomstick}
+		local witchItems = {pact, broomstick, necronomicon}
 		local itemCount = 0
 		
 		for k,v in pairs(witchItems) do
