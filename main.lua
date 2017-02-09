@@ -20,13 +20,15 @@ local familiar = nil
 local inquisitorBonus = 1.0 -- kerroin joka aktivoituu/muutetaan kun inkivisitio transform on päällä
 local sawAmount = 0
 local flatDmg = 4
+--SAW END
+
 
 local whip = Isaac.GetItemIdByName("Cat-o-nine-tails")
 local guillotine = Isaac.GetItemIdByName("Guillotine")
-local itemCount = 0
-local items = {tongueTearer, book, wheel, hereticsFork, theSaw, whip, quillotine}
 local isInquisitor = false
---SAW END
+
+local pact = Isaac.GetItemIdByName("The Pact")
+local isWitch = false
 
 --passive items
 local tongueTearer = Isaac.GetItemIdByName("Tongue Tearer")
@@ -61,6 +63,14 @@ local MIN_TEAR_DELAY = 5
 --local costume = Isaac.GetCostumeIdByPath("gfx/characters/Tempos_TongueTearer.anm2")
 --local costumeAdded = false
 local tearBonus = 1
+
+
+function modinNimi:init()
+
+	isInquisitor = false
+	isWitch = false
+	
+end
 
 local function PlaySoundAtPos(sound, volume, pos)
   local soundDummy = Isaac.Spawn(EntityType.ENTITY_FLY, 0, 0, pos, Vector(0,0), Isaac.GetPlayer(0));
@@ -141,24 +151,53 @@ function modinNimi:pickupPassiveItem(player, flag)
 end
 
 function modinNimi:onUpdate()
-
 	local player = Isaac.GetPlayer(0)
-		--INQUISITOR TRANSFORM
+	
+	--INQUISITOR TRANSFORM
 	if not isInquisitor then
 		
-		for k,v in pairs(items) do
+		local inquisitorItems = {tongueTearer, book, wheel, hereticsFork, theSaw, whip, quillotine}
+		local inquisitorItemCount = 0
+		
+		for k,v in pairs(inquisitorItems) do
 			if player:HasCollectible(v) then
-				itemCount = itemCount + 1
+				inquisitorItemCount = inquisitorItemCount + 1
 			end
 		end  
-		if itemCount >= 3 then
+		
+		--Isaac.RenderText("inquisitorItemCount: " ..inquisitorItemCount, 100, 90, 0, 75, 75, 255) --printti debuggia varten
+		
+		if inquisitorItemCount >= 3 then
 				--player:AnimateHappy()
 				isInquisitor = true
 				player:AddHearts(1)
 				player:AddNullCostume(costumeTransform)
 				PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
+				--transform teksti jotenkin näkyviin
 		end
+	end
+	
+	--WITCH TRANSFORM
+	if not isWitch then
 		
+		local witchItems = {pact, broomstick}
+		local itemCount = 0
+		
+		for k,v in pairs(witchItems) do
+			if player:HasCollectible(v) then
+				WitchItemCount = WitchItemCount + 1
+			end
+		end  
+		
+		--Isaac.RenderText("WitchItemCount: " ..WitchItemCount, 100, 90, 0, 75, 75, 255) --printti debuggia varten
+		
+		if WitchItemCount >= 3 then
+				isWitch = true
+				player:AddHearts(1)
+				--player:AddNullCostume(costumeWitchTransform) ei oo tehty vielä costumea
+				PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
+				--transform teksti jotenkin näkyviin
+		end	
 	end
 	
 	--alla oleva koodi kaataa pelin, koska nicalis pls??
@@ -235,7 +274,7 @@ function modinNimi:use_book( )
 	--		local TearData == entity:GetData()
 	--		local Tear = entity:ToTear()
 	--Tear:ChangeVariant(5)	--Fire Mind visual
-			Tear.TearFlags = TearFlags.FLAG_BURN
+	--Tear.TearFlags = TearFlags.FLAG_BURN
 	--Tear.CollisionDamage = Tear.CollisionDamage + 2
 		--end
 	--end
@@ -308,6 +347,7 @@ end
 
 modinNimi:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, modinNimi.pickupPassiveItem)
 
+modinNimi:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, modinNimi.init)
 modinNimi:AddCallback(ModCallbacks.MC_USE_ITEM, modinNimi.use_book, book)
 modinNimi:AddCallback(ModCallbacks.MC_USE_ITEM, modinNimi.use_wheel, wheel)
 
