@@ -44,6 +44,7 @@ local wheel = Isaac.GetItemIdByName( "Wheel" )
 --costumes
 local costumeBroomstick 		= Isaac.GetCostumeIdByPath("gfx/characters/broomstick.anm2")
 local costumeBroomstickBlack 	= Isaac.GetCostumeIdByPath("gfx/characters/broomstick_black.anm2")
+local costumeBroomstickBlacker 	= Isaac.GetCostumeIdByPath("gfx/characters/broomstick_blacker.anm2")
 local costumeBroomstickBlue 	= Isaac.GetCostumeIdByPath("gfx/characters/broomstick_blue.anm2")
 local costumeBroomstickGrey 	= Isaac.GetCostumeIdByPath("gfx/characters/broomstick_grey.anm2")
 local costumeInquisitor 		= Isaac.GetCostumeIdByPath("gfx/characters/inquisitor.anm2")
@@ -101,7 +102,9 @@ function modinNimi:pickupPassiveItem(player, flag)
 				--no costume
 			elseif (playerType == 14) or (playerType == 15) then 	--Keeper, Apollyon
 				player:AddNullCostume(costumeBroomstickGrey)
-			elseif (playerType == 12) or (playerType == 13) then 	--Black Judas, Lilith
+			elseif (playerType == 12) then 	--Black Judas
+				player:AddNullCostume(costumeBroomstickBlacker)
+			elseif (playerType == 13) then 	--Lilith
 				player:AddNullCostume(costumeBroomstickBlack)
 			else
 				player:AddNullCostume(costumeBroomstick)
@@ -183,8 +186,8 @@ function modinNimi:onUpdate()
 		
 		if WitchItemCount >= 3 then
 				isWitch = true
-				player:AddHearts(1)
-				--player:AddNullCostume(costumeWitchTransform) ei oo tehty vielä costumea
+				player:AddBlackHearts(1)
+				--player:AddNullCostume(costumeWitchTransform) TODO, ei oo tehty vielä costumea
 				PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
 				--transform teksti jotenkin näkyviin
 		end	
