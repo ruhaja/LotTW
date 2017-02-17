@@ -96,13 +96,13 @@ function modinNimi:pickupPassiveItem(player, flag)
 			player.CanFly = true
 			local playerType = player:GetPlayerType()
 			if (playerType == 4) then		--Blue Baby
-				player:AddNullCostume(costumeBroomstick)	--costumeBroomstickBlue...
+				player:AddNullCostume(costumeBroomstickBlue)
 			elseif (playerType == 10) or (playerType == 7) then 	--The Lost, Azazel
 				--no costume
 			elseif (playerType == 14) or (playerType == 15) then 	--Keeper, Apollyon
-				player:AddNullCostume(costumeBroomstick)	--costumeBroomstickBlueGrey...
+				player:AddNullCostume(costumeBroomstickGrey)
 			elseif (playerType == 12) or (playerType == 13) then 	--Black Judas, Lilith
-				player:AddNullCostume(costumeBroomstick)	--costumeBroomstickBlack
+				player:AddNullCostume(costumeBroomstickBlack)
 			else
 				player:AddNullCostume(costumeBroomstick)
 			end
