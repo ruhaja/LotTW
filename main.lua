@@ -42,12 +42,12 @@ local book = Isaac.GetItemIdByName( "Malleus Maleficarum" )
 local wheel = Isaac.GetItemIdByName( "Wheel" )
 
 --costumes
-local costumeBroomstick = Isaac.GetCostumeIdByPath("gfx/characters/broomstick.anm2")
-local costumeTransform = Isaac.GetCostumeIdByPath("gfx/characters/inquisitor.anm2")
---modinNimi.COSTUME_BLUE_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/blue_broomstick.anm2")	--blue
---modinNimi.COSTUME_GRAY_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/gray_broomstick.anm2")	--gray
---modinNimi.COSTUME_BLACK_BROOMSTICK = Isaac.GetCostumeIdByPath("gfx/characters/black_broomstick.anm2")	--black
-local costumeHereticsFork = Isaac.GetCostumeIdByPath("gfx/characters/hereticsfork.anm2")
+local costumeBroomstick 		= Isaac.GetCostumeIdByPath("gfx/characters/broomstick.anm2")
+local costumeBroomstickBlack 	= Isaac.GetCostumeIdByPath("gfx/characters/broomstick_black.anm2")
+local costumeBroomstickBlue 	= Isaac.GetCostumeIdByPath("gfx/characters/broomstick_blue.anm2")
+local costumeBroomstickGrey 	= Isaac.GetCostumeIdByPath("gfx/characters/broomstick_grey.anm2")
+local costumeInquisitor 		= Isaac.GetCostumeIdByPath("gfx/characters/inquisitor.anm2")
+local costumeHereticsFork		= Isaac.GetCostumeIdByPath("gfx/characters/hereticsfork.anm2")
 --local costumeAdded = false
 
 
@@ -94,22 +94,18 @@ function modinNimi:pickupPassiveItem(player, flag)
 	if player:HasCollectible(broomstick) then
 		if flag == CacheFlag.CACHE_FLYING then
 			player.CanFly = true
-			--if (player.GetPlayerType() == 4) then	--Blue Baby
-			--blue costume
-			--end
-			--elseif (player.GetPlayerType() == 10 or 7) then 	--The Lost, Azazel
-			--no costume change
-			--end
-			--elseif (player.GetPlayerType() == 14 or 15) then 	--Keeper, Apollyon
-			--gray costume 
-			--end
-			--elseif (player.GetPlayerType() == 12 or 13) then --Black Judas, Lilith
-			--black costume
-			--end
-			--else
-			--basic costume
-			player:AddNullCostume(costumeBroomstick)
-			--end
+			local playerType = player:GetPlayerType()
+			if (playerType == 4) then		--Blue Baby
+				player:AddNullCostume(costumeBroomstick)	--costumeBroomstickBlue...
+			elseif (playerType == 10) or (playerType == 7) then 	--The Lost, Azazel
+				--no costume
+			elseif (playerType == 14) or (playerType == 15) then 	--Keeper, Apollyon
+				player:AddNullCostume(costumeBroomstick)	--costumeBroomstickBlueGrey...
+			elseif (playerType == 12) or (playerType == 13) then 	--Black Judas, Lilith
+				player:AddNullCostume(costumeBroomstick)	--costumeBroomstickBlack
+			else
+				player:AddNullCostume(costumeBroomstick)
+			end
 		end
 	end
 	
@@ -165,7 +161,7 @@ function modinNimi:onUpdate()
 				--player:AnimateHappy()
 				isInquisitor = true
 				player:AddHearts(1)
-				player:AddNullCostume(costumeTransform)
+				player:AddNullCostume(costumeInquisitor)
 				PlaySoundAtPos(SoundEffect.SOUND_POWERUP_SPEWER, 1.0, player.Position)
 				--transform teksti jotenkin näkyviin
 		end
@@ -175,7 +171,7 @@ function modinNimi:onUpdate()
 	if not isWitch then
 		
 		local witchItems = {pact, broomstick, necronomicon}
-		local itemCount = 0
+		local WitchItemCount = 0
 		
 		for k,v in pairs(witchItems) do
 			if player:HasCollectible(v) then

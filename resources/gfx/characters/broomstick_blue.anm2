@@ -1,8 +1,8 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="17/02/2017 14:25:19" Version="25" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="17/02/2017 15:08:04" Version="26" Fps="30"/>
 	<Content>
 		<Spritesheets>
-			<Spritesheet Path="costumes\costume_broomstick_body.png" Id="0"/>
+			<Spritesheet Path="costumes\costume_broomstick_blue_body.png" Id="0"/>
 		</Spritesheets>
 		<Layers>
 			<Layer Name="body" Id="0" SpritesheetId="0"/>
