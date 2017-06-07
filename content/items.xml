@@ -1,7 +1,8 @@
 <items gfxroot="gfx/items/" version="1">
-	<active cache="tearflag" description="Burn the heretics" gfx="malleusmaleficarum.png" maxcharges="4" name="Malleus Maleficarum" />
+	<active cache="tearflag" description="Burn the heretics" gfx="malleusmaleficarum.png" maxcharges="0" name="Malleus Maleficarum" />
 	<active description="Break 'em all" gfx="wheel.png" maxcharges="4" name="Wheel" />
 	<passive cache="shotspeed damage" description="Keep your chin up!" gfx="hereticsfork.png" name="Heretic's Fork" />
+	<passive cache="shotspeed damage" description="Kiss of Shame" gfx="osculuminfame.png" name="Osculum Infame" />
 	<passive cache="damage" description="Outhh! My thhongue!" gfx="tonguetearer.png" name="Tongue Tearer" />
 	<passive cache="flying" description="Wroom Broom" gfx="broomstick.png" name="Broomstick" />
 	<familiar cache="familiars" description="The ever groin pain" gfx="thesaw.png" name="The Saw" />

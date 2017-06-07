@@ -1,0 +1,8 @@
+<sounds root="sfx/" >
+	<sound name="testiSoundi">
+		<sample weight="1" path="soundi.wav" />
+	</sound>
+	<sound name="herp">
+		<sample weight="1" path="herp.wav" />
+	</sound>
+</sounds>

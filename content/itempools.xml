@@ -5,6 +5,7 @@
 		<Item Name="Malleus Maleficarum" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 		<Item Name="Heretic's Fork" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 		<Item Name="Broomstick" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Osculum Infame" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
 	
 	<Pool Name="shop">		
